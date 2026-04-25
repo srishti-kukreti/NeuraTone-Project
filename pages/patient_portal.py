@@ -1275,31 +1275,54 @@ Begin by introducing yourself as Dr. Maya and inviting the patient to begin when
 # ══════════════════════════════════════════════════════════════════════
 # MODE: YOUTUBE URL
 # ══════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════
+# MODE: VIDEO FILE UPLOAD (Fix for YouTube Link Error)
+# ══════════════════════════════════════════════════════════════════════
 
 elif st.session_state.portal_mode == "YouTube URL":
 
-    st.markdown("### YouTube Analysis")
-    st.info("Domain will be automatically set to **1.0 (Vlog)** for YouTube sources.")
+    st.markdown("### Video Analysis (Local Upload)")
+    st.info("Upload an MP4 or MKV file to run the behavioral analysis. This bypasses the YouTube deployment restrictions.")
 
-    yt_url = st.text_input(
-        "YouTube URL",
-        placeholder = "https://www.youtube.com/watch?v=…",
+    uploaded_vid = st.file_uploader(
+        "Select Video File",
+        type = ["mp4", "mkv", "mov", "avi"],
+        help = "NeuraTone will extract the audio track for temporal behavioral analysis."
     )
 
-    if st.button(
-        "Analyse YouTube Video", type="primary",
-        disabled=not yt_url or st.session_state.running
-    ):
-        st.session_state.analysis_result = None
-        st.session_state.running = True
-        with st.spinner("Downloading audio and running inference…"):
-            _run_analysis(
-                source        = yt_url,
-                patient_name  = st.session_state.patient_name,
-                forced_domain = 1.0,
-            )
-        st.session_state.running = False
-        st.rerun()
+    if uploaded_vid is not None:
+        # Show a preview of the video to the examiners
+        st.video(uploaded_vid)
+        
+        if st.button(
+            "Analyse Video Content", type="primary",
+            disabled=st.session_state.running
+        ):
+            st.session_state.analysis_result = None
+            st.session_state.running = True
+
+            # Save the uploaded video to a temporary file
+            suffix = os.path.splitext(uploaded_vid.name)[1] or ".mp4"
+            with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tf:
+                tf.write(uploaded_vid.read())
+                tmp_path = tf.name
+
+            with st.spinner("Extracting acoustic features and running inference..."):
+                # We keep forced_domain=1.0 because these are 'Vlog' style inputs
+                _run_analysis(
+                    source        = tmp_path,
+                    patient_name  = st.session_state.patient_name,
+                    forced_domain = 1.0,
+                )
+            
+            # Cleanup temp file after analysis
+            try:
+                os.remove(tmp_path)
+            except:
+                pass
+                
+            st.session_state.running = False
+            st.rerun()
 
     if st.session_state.analysis_result:
         _show_results(st.session_state.analysis_result)
