@@ -27,7 +27,7 @@ DATA_DIR     = os.path.join(_ENGINE_DIR, "data")
 
 
 # ══════════════════════════════════════════════════════════════════════
-# GEMINI SEMANTIC SUMMARY  (unchanged from v5)
+# GEMINI SEMANTIC SUMMARY (Updated for 2026 google-genai SDK)
 # ══════════════════════════════════════════════════════════════════════
 
 def generate_gemini_summary(report: dict, gemini_api_key: str,
@@ -39,8 +39,8 @@ def generate_gemini_summary(report: dict, gemini_api_key: str,
         # Initialize the new Client
         client = genai.Client(api_key=gemini_api_key, http_options={'api_version': 'v1beta'})
         
-        # Use the same stable model ID from your Kore session
-        model_id = "gemini-1.5-flash" 
+        # FIX: Using 'gemini-1.5-flash-latest' to avoid 404 NOT_FOUND errors
+        model_id = "gemini-1.5-flash-latest" 
 
         band      = report.get("band_info", {})
         signals   = report.get("acoustic_signals", [])
@@ -57,7 +57,7 @@ def generate_gemini_summary(report: dict, gemini_api_key: str,
             lines = "\n".join(f"  {q}: {a}" for q, a in interview_answers.items())
             interview_section = f"\n\nPatient interview responses:\n{lines}"
 
-        prompt = f"""You are a clinical assistant reviewing an acoustic screening.
+        prompt = f"""You are a clinical assistant reviewing an acoustic screening result.
 Screening results:
   • PHQ-8 Estimate : {report['phq8_estimate']:.1f} / 24
   • Severity Band  : {report['severity']}
