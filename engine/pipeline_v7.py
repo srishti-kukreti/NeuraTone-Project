@@ -16,13 +16,17 @@ import uuid
 import datetime
 import numpy as np
 
-_ENGINE_DIR = os.path.dirname(os.path.abspath(__file__))
+_ENGINE_DIR  = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.dirname(_ENGINE_DIR)
+
+# Ensure the engine directory is in the system path for imports
 if _ENGINE_DIR not in sys.path:
     sys.path.insert(0, _ENGINE_DIR)
 
 from inference_engine_v4 import InferencePipeline, EGEMAPS_FEATURE_NAMES
 
-REPORTS_PATH = os.path.join(os.path.dirname(_ENGINE_DIR), "reports.json")
+# THE FIX: This forces every page to use the EXACT same reports.json file
+REPORTS_PATH = os.path.join(_PROJECT_ROOT, "reports.json")
 DATA_DIR     = os.path.join(_ENGINE_DIR, "data")
 
 
