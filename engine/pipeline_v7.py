@@ -83,20 +83,29 @@ def generate_gemini_summary(report: dict, gemini_api_key: str = None,
 # REPORTS DATABASE
 # ══════════════════════════════════════════════════════════════════════
 
-def _load_reports() -> list:
-    if not os.path.exists(REPORTS_PATH):
-        return []
-    try:
-        with open(REPORTS_PATH, "r") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, IOError):
-        return []
+from streamlit_gsheets import GSheetsConnection
 
+def _get_gsheets_connection():
+    return st.connection("gsheets", type=GSheetsConnection)
+
+def _load_reports() -> list:
+    try:
+        conn = _get_gsheets_connection()
+        # Read the sheet into a list of dicts
+        df = conn.read()
+        return df.to_dict('records')
+    except Exception:
+        return []
 
 def _save_reports(reports: list):
-    with open(REPORTS_PATH, "w") as f:
-        json.dump(reports, f, indent=2, default=_json_serialise)
-
+    try:
+        conn = _get_gsheets_connection()
+        import pandas as pd
+        df = pd.DataFrame(reports)
+        # Write the entire dataframe back to the sheet
+        conn.update(data=df)
+    except Exception as e:
+        print(f"Cloud Save Failed: {e}")
 
 def _json_serialise(obj):
     if isinstance(obj, np.integer):  return int(obj)
