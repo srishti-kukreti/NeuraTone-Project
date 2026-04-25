@@ -1,0 +1,42 @@
+{
+  "BiGRU": {
+    "input_dim": 24,
+    "hidden": 128,
+    "n_layers": 2,
+    "dropout": 0.21203598239032645,
+    "max_seq_len": 300
+  },
+  "Conformer": {
+    "input_dim": 24,
+    "dm": 96,
+    "n_blocks": 2,
+    "n_heads": 4,
+    "dropout": 0.19138413075201122,
+    "max_seq_len": 300
+  },
+  "TAN": {
+    "input_dim": 24,
+    "dm": 96,
+    "n_scales": 2,
+    "dropout": 0.4868466053024314,
+    "max_seq_len": 300
+  },
+  "CNNTransformer": {
+    "input_dim": 24,
+    "dm": 128,
+    "n_heads": 8,
+    "n_layers": 1,
+    "dropout": 0.20225062698732635,
+    "max_seq_len": 300
+  },
+  "p-DREAM": {
+    "input_dim": 24,
+    "d_model": 64,
+    "nhead": 4,
+    "prompt_len": 8,
+    "n_layers": 5,
+    "dropout": 0.2780587339805291,
+    "input_drop": 0.2371009216257869,
+    "max_seq_len": 300
+  }
+}

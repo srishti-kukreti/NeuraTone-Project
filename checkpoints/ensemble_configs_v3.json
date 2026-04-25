@@ -1,0 +1,79 @@
+{
+  "Ensemble_Avg": {
+    "strategy": "simple_average",
+    "members": [
+      "BiGRU",
+      "Conformer",
+      "TAN",
+      "CNNTransformer",
+      "p-DREAM",
+      "XGBoost",
+      "LightGBM",
+      "CatBoost",
+      "MLP"
+    ]
+  },
+  "Ensemble_Wtd": {
+    "strategy": "val_f1_weighted",
+    "members": [
+      "BiGRU",
+      "Conformer",
+      "TAN",
+      "CNNTransformer",
+      "p-DREAM",
+      "XGBoost",
+      "LightGBM",
+      "CatBoost",
+      "MLP"
+    ],
+    "weights": [
+      0.107683216968076,
+      0.1119438958777154,
+      0.11390318617922841,
+      0.10696792050879347,
+      0.10928485903994774,
+      0.1170287207078325,
+      0.11339003871930833,
+      0.11450963317731577,
+      0.10528852882178233
+    ]
+  },
+  "Ensemble_DL_Wtd": {
+    "strategy": "val_f1_weighted_dl",
+    "members": [
+      "BiGRU",
+      "Conformer",
+      "TAN",
+      "CNNTransformer",
+      "p-DREAM"
+    ],
+    "weights": [
+      0.19586491684579707,
+      0.2036146622921145,
+      0.20717841384772037,
+      0.19456386469057588,
+      0.1987781423237923
+    ]
+  },
+  "Ensemble_Stack": {
+    "strategy": "stacking_meta_lr",
+    "members": [
+      "BiGRU",
+      "Conformer",
+      "TAN",
+      "CNNTransformer",
+      "p-DREAM",
+      "XGBoost",
+      "LightGBM",
+      "CatBoost",
+      "MLP"
+    ]
+  },
+  "Ensemble_TAN_LGB": {
+    "strategy": "simple_average",
+    "members": [
+      "TAN",
+      "LightGBM"
+    ]
+  }
+}

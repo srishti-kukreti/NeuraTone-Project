@@ -1,0 +1,8 @@
+{
+  "n_features_dl": 24,
+  "n_features_classical": 23,
+  "n_features_enriched": 598,
+  "max_seq_len": 300,
+  "scaler_fitted_on": "frame_level_dl_features",
+  "classical_scaler": "none \u2014 enriched features fed directly to XGB/LGB/Cat/MLP"
+}

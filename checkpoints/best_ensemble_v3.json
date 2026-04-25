@@ -1,0 +1,17 @@
+{
+  "name": "Ensemble_TAN_LGB",
+  "strategy": "simple_average",
+  "members": [
+    "TAN",
+    "LightGBM"
+  ],
+  "val_f1": 0.7395,
+  "test_f1": 0.7567832625040862,
+  "accuracy": 0.7580645161290323,
+  "auc_roc": 0.8329756097560975,
+  "auc_pr": 0.8404818159935248,
+  "mdd_rec": 0.824,
+  "hc_rec": 0.6910569105691057,
+  "best_threshold": 0.47,
+  "ensemble_weights": null
+}
