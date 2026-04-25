@@ -29,49 +29,54 @@ DATA_DIR     = os.path.join(_ENGINE_DIR, "data")
 def generate_gemini_summary(report: dict, gemini_api_key: str = None, 
                              interview_answers: dict = None) -> str:
     """
-    Generates a structured, high-fidelity clinical summary and 
-    personalized recommendation based on NeuraTone v8 behavioral biomarkers.
+    Generates a sophisticated, high-fidelity clinical summary.
+    This replaces the failing API call with stable, data-driven internal logic.
     """
-    sev = report.get("severity", "Minimal")
-    phq = report.get("phq8_estimate", 0)
-    prob = report.get("ensemble_prob", 0)
+    sev   = report.get("severity", "Minimal")
+    phq   = report.get("phq8_estimate", 0)
+    prob  = report.get("ensemble_prob", 0)
     label = report.get("label", "Healthy Control")
     trend = report.get("temporal_info", {}).get("trend", "stable")
     
-    # 1. Acoustic Pattern Analysis
+    # Professional severity icons matching your project identity
+    icons = {"Minimal": "🟢", "Mild": "🟡", "Moderate": "🟠", "Moderately Severe": "🔴", "Severe": "🚨"}
+    icon = icons.get(sev, "⚪")
+
+    # 1. Enhanced Acoustic Pattern Analysis (Clinical Language)
     patterns = {
-        "Minimal": "The patient's acoustic profile shows high prosodic variance and stable temporal flow, with no significant indicators of vocal blunting or psychomotor slowing.",
-        "Mild": "There are subtle acoustic deviations present, including slight reductions in pitch range and minor temporal irregularities that may suggest a sub-clinical shift in affect.",
-        "Moderate": "Analysis reveals clear 'Acoustic Blunting' patterns. Significant markers include reduced vowel space and increased pause duration, correlating with moderate depressive affect.",
-        "Moderately Severe": "The framework has detected pronounced psychomotor retardation markers. High-confidence biomarkers indicate significant monotony and a fragmented temporal speech structure.",
-        "Severe": "Critical acoustic indicators of profound speech monotony and extreme temporal flatness are present. These markers are highly consistent with severe clinical depression and possible cognitive slowing."
+        "Minimal": "The acoustic profile exhibits vibrant prosodic dynamics and a fluid temporal cadence. Vocal biomarkers are indicative of healthy emotional regulation, with no evidence of the vocal blunting typically associated with depressive affect.",
+        "Mild": "Observations indicate subtle fluctuations in vocal prosody, including a narrowed F0 range and minor temporal irregularities. These markers suggest a sub-clinical variance in affect, warranting proactive monitoring.",
+        "Moderate": "Acoustic analysis reveals definitive patterns of 'Vocal Blunting.' Significant markers include a constricted vowel space and elongated pause durations, which statistically correlate with a moderate shift in emotional state.",
+        "Moderately Severe": "The framework has identified pronounced biomarkers of psychomotor retardation. The speech architecture is characterized by significant monotony and fragmented temporal sequencing, indicative of a clinical depressive state.",
+        "Severe": "Critical indicators of profound 'Acoustic Flattening' and psychomotor slowing are present. The speech profile exhibits extreme temporal rigidity and vocal monotony, highly consistent with severe clinical depression."
     }
 
     # 2. Personalized Clinical Recommendations
     recommendations = {
-        "Minimal": "Routine mental wellness monitoring is sufficient. The patient should be encouraged to continue current self-care practices and return for a follow-up assessment in 6 months.",
-        "Mild": "Recommend 'Watchful Waiting' alongside psychoeducational resources. A follow-up acoustic screening is advised in 4 weeks to monitor for potential symptom escalation.",
-        "Moderate": "A formal diagnostic interview with a licensed clinician is recommended. Consideration should be given to cognitive behavioral therapy (CBT) or supportive counseling.",
-        "Moderately Severe": "Urgent specialist referral is advised. The clinical team should prioritize a comprehensive treatment plan, potentially incorporating both therapeutic and pharmacological interventions.",
-        "Severe": "Immediate clinical assessment and crisis intervention protocols should be initiated. Prioritize patient safety and consider intensive outpatient or inpatient psychiatric support."
+        "Minimal": "Continue routine mental wellness monitoring. The patient is encouraged to maintain current self-care practices with a follow-up assessment suggested in 6 months.",
+        "Mild": "Implement a 'Watchful Waiting' protocol. Provide psychoeducational resources and schedule a follow-up acoustic screening in 4 weeks to monitor behavioral stability.",
+        "Moderate": "A formal diagnostic interview with a licensed clinician is advised. Consideration should be given to therapeutic interventions such as Cognitive Behavioral Therapy (CBT).",
+        "Moderately Severe": "Urgent specialist referral is recommended for active treatment planning. The clinical team should prioritize a comprehensive review and monitor for potential symptom escalation.",
+        "Severe": "Immediate clinical assessment and crisis intervention protocols should be initiated. Prioritize patient safety and evaluate the requirement for intensive psychiatric support."
     }
 
-    # 3. Final Multi-Paragraph Construction
+    # 3. High-End Markdown Construction
     summary = (
-        f"### **Clinical Summary**\n"
-        f"NeuraTone analysis of the patient's vocal biomarkers indicates a **{sev.lower()} level** of depressive symptomatology. "
+        f"#### {icon} **Clinical Synthesis**\n"
+        f"> NeuraTone analysis indicates a **{sev.lower()} level** of depressive symptomatology. "
         f"{patterns.get(sev, patterns['Minimal'])}\n\n"
-        f"### **Data Evidence**\n"
-        f"The screening yielded a PHQ-8 estimate of **{phq:.1f}/24** with an ensemble classification probability of **{prob:.2%}**. "
-        f"The temporal trend is currently observed as **{trend}**, suggesting { 'persistent' if trend == 'descending' else 'fluctuating' } behavioral patterns over the course of the session.\n\n"
-        f"### **Clinical Plan**\n"
+        f"#### 📊 **Diagnostic Evidence**\n"
+        f"* **PHQ-8 Estimate:** {phq:.1f} / 24\n"
+        f"* **Ensemble Probability:** {prob:.2%}\n"
+        f"* **Temporal Trend:** The behavioral trajectory is currently **{trend}**, suggesting "
+        f"{ 'persistent' if trend == 'descending' else 'fluctuating' } affect over the session duration.\n\n"
+        f"#### 🩺 **Clinical Recommendation**\n"
         f"{recommendations.get(sev, recommendations['Minimal'])}\n\n"
         f"--- \n"
-        f"*Note: This summary is based on 88-dimensional eGeMAPS feature extraction and TAN-BiGRU modeling.*"
+        f"*Technical Note: This report is derived from 88-dimensional eGeMAPS feature extraction and Temporal Attention Network (TAN) inference.*"
     )
     
     return summary
-        
 # ══════════════════════════════════════════════════════════════════════
 # REPORTS DATABASE
 # ══════════════════════════════════════════════════════════════════════
