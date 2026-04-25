@@ -418,6 +418,7 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════
 # SHARED HELPERS
 # ══════════════════════════════════════════════════════════════════════
+# ── SHARED HELPERS ───────────────────────────────────────────────────
 
 @st.cache_resource
 def _get_engine(ckpt_dir: str, api_key: str):
@@ -427,14 +428,13 @@ def _get_engine(ckpt_dir: str, api_key: str):
         gemini_api_key  = api_key or None,
     )
 
-
 @st.cache_resource
 def _get_gemini_model(api_key: str):
     if not api_key:
         return None
     try:
         from google import genai
-        # Initialize client instead of configuring global genai
+        # Initialize client with the current production API version
         return genai.Client(api_key=api_key, http_options={'api_version': 'v1beta'})
     except Exception:
         return None
@@ -443,13 +443,21 @@ def _ask_gemini_question(client, question_text: str) -> str:
     if client is None:
         return question_text
     try:
-        prompt = f"Rephrase this clinical question warmly: {question_text}"
-        # Update to new .models.generate_content call
-        resp = client.models.generate_content(model="gemini-1.5-flash", contents=prompt)
+        prompt = (
+            "You are a warm, empathetic Senior Clinical Psychologist conducting a brief "
+            "mental wellness check-in. Rephrase the following clinical question "
+            "in a natural, supportive, conversational tone (2 sentences max). "
+            "Do NOT add preamble or sign-offs.\n\n"
+            f"Question: {question_text}"
+        )
+        # Fix: Updated model string to avoid 404 errors in the v1beta endpoint
+        resp = client.models.generate_content(
+            model="gemini-1.5-flash-latest", 
+            contents=prompt
+        )
         return resp.text.strip()
     except Exception:
         return question_text
-
 
 def _run_analysis(source, patient_name, interview_answers=None, forced_domain=None):
     try:
