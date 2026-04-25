@@ -46,7 +46,7 @@ if _ENGINE not in sys.path:
 
 from utils import (
     GLOBAL_CSS, CLINICAL_QUESTIONS, PHQ9_QUESTIONS,
-    SEVERITY_COLORS, SEVERITY_EMOJI,
+    SEVERITY_COLORS, SEVERITY_EMOJI, dr_maya_voice_trigger,
     decode_audio_bytes, stitch_audio_segments, save_temp_wav,
     # Vault helpers (Req 3)
     init_vault, vault_set, vault_get, vault_clear_one, vault_all_segments,
@@ -1124,14 +1124,31 @@ Begin by introducing yourself as Dr. Maya and inviting the patient to begin when
                         st.session_state.interview_step = prev_step
                         st.rerun()
 
-            # ── Current active question ───────────────────────────────
+            '''# ── Current active question ───────────────────────────────
             st.markdown(
                 f'<div class="q-card">'
                 f'<b>Question {step} of 9</b><br>'
                 f'{phrased_q}'
                 f'</div>',
                 unsafe_allow_html=True,
-            )
+            )'''
+
+            # ── Current active question with Speaker Button ───────────
+            q_col, speak_col = st.columns([0.85, 0.15])
+            
+            with q_col:
+                st.markdown(
+                    f'<div class="q-card">'
+                    f'<b>Question {step} of 9</b><br>'
+                    f'{phrased_q}'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+            
+            with speak_col:
+                st.markdown("<br>", unsafe_allow_html=True)
+                if st.button("🔊", key=f"speak_q_{step}", help="Hear Dr. Maya read the question"):
+                    dr_maya_voice_trigger(phrased_q)
 
             # ── Text-to-Speech (Read Aloud) ───────────────────────────
             tts_key = f"_tts_q_{step}"
