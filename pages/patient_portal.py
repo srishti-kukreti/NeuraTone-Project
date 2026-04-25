@@ -440,23 +440,16 @@ def _get_gemini_model(api_key: str):
         return None
 
 def _ask_gemini_question(client, question_text: str) -> str:
+    """Safe rephrasing with automatic fallback to prevent 404 errors."""
     if client is None:
         return question_text
     try:
-        prompt = (
-            "You are a warm, empathetic Senior Clinical Psychologist conducting a brief "
-            "mental wellness check-in. Rephrase the following clinical question "
-            "in a natural, supportive, conversational tone (2 sentences max). "
-            "Do NOT add preamble or sign-offs.\n\n"
-            f"Question: {question_text}"
-        )
-        # Fix: Updated model string to avoid 404 errors in the v1beta endpoint
-        resp = client.models.generate_content(
-            model="gemini-1.5-flash-latest", 
-            contents=prompt
-        )
+        prompt = f"Rephrase this clinical question warmly: {question_text}"
+        # Using the latest model identifier for stability
+        resp = client.models.generate_content(model="gemini-1.5-flash-latest", contents=prompt)
         return resp.text.strip()
     except Exception:
+        # Fallback to the original question if the API is unavailable
         return question_text
 
 def _run_analysis(source, patient_name, interview_answers=None, forced_domain=None):
