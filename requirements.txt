@@ -1,0 +1,38 @@
+# ── Core ─────────────────────────────────────────────────────────────
+streamlit>=1.31.0          # st.audio_input() and st.navigation() require 1.31+
+altair>=5.0.0              # temporal sparkline charts
+
+# ── Inference engine deps (must match training environment) ──────────
+torch>=2.0.0
+lightgbm>=3.3.0
+scikit-learn>=1.2.0
+opensmile>=2.4.0
+soundfile>=0.12.0
+scipy>=1.10.0
+numpy>=1.24.0
+
+# ── Audio ingestion ──────────────────────────────────────────────────
+pydub>=0.25.0              # WebM/Opus → WAV conversion (browser recordings)
+# ffmpeg must be installed on the system:
+#   Ubuntu/Debian : sudo apt-get install ffmpeg
+#   macOS         : brew install ffmpeg
+
+# ── Optional but strongly recommended ───────────────────────────────
+librosa>=0.10.0            # high-quality resampling
+
+# ── YouTube support ──────────────────────────────────────────────────
+yt-dlp>=2024.1.0
+
+# ── v6: Gemini Live API ───────────────────────────────────────────────
+google-genai>=0.8.0        # Gemini 3.1 Flash Live (Live API / bidirectional WSS)
+google-generativeai>=0.5.0 # Gemini 1.5 Flash (summary & interview questions)
+
+# ── v6: PDF Report Generation ─────────────────────────────────────────
+fpdf2>=2.7.0               # Professional clinical PDF reports
+
+# ── v6: WebRTC bidirectional audio ────────────────────────────────────
+streamlit-webrtc>=0.47.0   # Real-time bidirectional audio stream (Live Session)
+av>=11.0.0                 # PyAV — audio frame processing for webrtc
+
+# ── Misc ─────────────────────────────────────────────────────────────
+pandas>=2.0.0              # used by Altair chart DataFrames
