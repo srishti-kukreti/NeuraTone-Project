@@ -36,3 +36,4 @@ av>=11.0.0                 # PyAV — audio frame processing for webrtc
 
 # ── Misc ─────────────────────────────────────────────────────────────
 pandas>=2.0.0              # used by Altair chart DataFrames
+st-gsheets-connection
