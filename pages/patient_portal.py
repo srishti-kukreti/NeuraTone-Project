@@ -1124,14 +1124,6 @@ Begin by introducing yourself as Dr. Maya and inviting the patient to begin when
                         st.session_state.interview_step = prev_step
                         st.rerun()
 
-            '''# ── Current active question ───────────────────────────────
-            st.markdown(
-                f'<div class="q-card">'
-                f'<b>Question {step} of 9</b><br>'
-                f'{phrased_q}'
-                f'</div>',
-                unsafe_allow_html=True,
-            )'''
 
             # ── Current active question with Speaker Button ───────────
             q_col, speak_col = st.columns([0.85, 0.15])
