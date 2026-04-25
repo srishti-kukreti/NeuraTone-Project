@@ -433,25 +433,19 @@ def _get_gemini_model(api_key: str):
     if not api_key:
         return None
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        return genai.GenerativeModel("gemini-3-flash")
+        from google import genai
+        # Initialize client instead of configuring global genai
+        return genai.Client(api_key=api_key, http_options={'api_version': 'v1beta'})
     except Exception:
         return None
 
-
-def _ask_gemini_question(model, question_text: str) -> str:
-    if model is None:
+def _ask_gemini_question(client, question_text: str) -> str:
+    if client is None:
         return question_text
     try:
-        prompt = (
-            "You are a warm, empathetic Senior Clinical Psychologist conducting a brief "
-            "mental wellness check-in. Rephrase the following clinical question "
-            "in a natural, supportive, conversational tone (2 sentences max). "
-            "Do NOT add preamble or sign-offs.\n\n"
-            f"Question: {question_text}"
-        )
-        resp = model.generate_content(prompt)
+        prompt = f"Rephrase this clinical question warmly: {question_text}"
+        # Update to new .models.generate_content call
+        resp = client.models.generate_content(model="gemini-1.5-flash", contents=prompt)
         return resp.text.strip()
     except Exception:
         return question_text
