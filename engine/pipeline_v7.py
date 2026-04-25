@@ -35,8 +35,8 @@ def generate_gemini_summary(report: dict, gemini_api_key: str,
     try:
         import google.generativeai as genai
         genai.configure(api_key=gemini_api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
-
+        # 'gemini-3-flash' is the standard high-speed model for 2026
+        model = genai.GenerativeModel("gemini-3-flash")
         band      = report.get("band_info", {})
         signals   = report.get("acoustic_signals", [])
         temporal  = report.get("temporal_info", {})
