@@ -432,13 +432,27 @@ class ClinicalEngine:
             acoustic_report["safety_override"] = True
             acoustic_report["label"]           = "MDD"
 
-        # ── 4. Gemini summary ─────────────────────────────────────────
-        if self.gemini_api_key:
+       # ── 4. Summary Safety Gate ────────────────────────────────────
+        try:
+            # We call your new deterministic summary logic here
             gemini_summary = generate_gemini_summary(
                 acoustic_report, self.gemini_api_key, interview_answers
             )
-        else:
-            gemini_summary = "No Gemini API key configured — acoustic results above are complete."
+        except Exception as e:
+            # If the summary logic has a bug, we save a fallback so the 
+            # entire analysis doesn't fail.
+            gemini_summary = f"Summary generation error: {e}. Check raw biomarkers."
+
+        # ── 5. Persist report ─────────────────────────────────────────
+        # This MUST be outside the try/except to ensure the save happens
+        report_id = save_report_entry(
+            raw_audio_path    = raw_audio_path,
+            acoustic_report   = acoustic_report,
+            gemini_summary    = gemini_summary,
+            patient_name      = patient_name,
+            source_type       = src_type,
+            interview_answers = interview_answers,
+        )
 
         # ── 5. Persist report (PDF generated on demand) ──────────────
         report_id = save_report_entry(
