@@ -33,10 +33,15 @@ DATA_DIR     = os.path.join(_ENGINE_DIR, "data")
 def generate_gemini_summary(report: dict, gemini_api_key: str,
                              interview_answers: dict = None) -> str:
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=gemini_api_key)
-        # 'gemini-3-flash' is the standard high-speed model for 2026
-        model = genai.GenerativeModel("gemini-3-flash")
+        from google import genai
+        from google.genai import types
+
+        # Initialize the new Client
+        client = genai.Client(api_key=gemini_api_key, http_options={'api_version': 'v1beta'})
+        
+        # Use the same stable model ID from your Kore session
+        model_id = "gemini-1.5-flash" 
+
         band      = report.get("band_info", {})
         signals   = report.get("acoustic_signals", [])
         temporal  = report.get("temporal_info", {})
@@ -49,40 +54,31 @@ def generate_gemini_summary(report: dict, gemini_api_key: str,
 
         interview_section = ""
         if interview_answers:
-            lines = "\n".join(
-                f"  {q}: {a}" for q, a in interview_answers.items()
-            )
+            lines = "\n".join(f"  {q}: {a}" for q, a in interview_answers.items())
             interview_section = f"\n\nPatient interview responses:\n{lines}"
 
-        prompt = f"""You are a clinical assistant helping a psychiatrist review an automated acoustic depression screening result.
-
+        prompt = f"""You are a clinical assistant reviewing an acoustic screening.
 Screening results:
   • PHQ-8 Estimate : {report['phq8_estimate']:.1f} / 24
   • Severity Band  : {report['severity']}
-  • Classification : {report['label']} {'(Safety Override Applied)' if report.get('safety_override') else ''}
-  • Ensemble Prob  : {report['ensemble_prob']:.4f}
-  • Audio Duration : {report['duration_sec']}s
+  • Classification : {report['label']}
   • Trend          : {temporal.get('trend', 'N/A')}
 
 Top acoustic biomarkers:
 {biomarker_lines}{interview_section}
 
-Write a concise clinical summary (3–4 sentences) for the doctor's review.
-Focus on: what the acoustic markers indicate, the severity level, and any clinically relevant patterns.
-Be factual and measured. Do not speculate beyond the data.
-Do not repeat raw numbers already visible in the dashboard.
-End with a one-sentence clinical recommendation appropriate to the severity band."""
+Write a concise clinical summary (3-4 sentences) for the doctor's review."""
 
-        response = model.generate_content(prompt)
+        # Use the new .models.generate_content syntax
+        response = client.models.generate_content(
+            model=model_id,
+            contents=prompt
+        )
         return response.text.strip()
 
     except Exception as e:
-        return (
-            f"Gemini summary unavailable ({type(e).__name__}). "
-            f"Review acoustic biomarkers and PHQ-8 score directly."
-        )
-
-
+        return f"Gemini summary unavailable ({type(e).__name__}: {e})"
+        
 # ══════════════════════════════════════════════════════════════════════
 # REPORTS DATABASE
 # ══════════════════════════════════════════════════════════════════════
