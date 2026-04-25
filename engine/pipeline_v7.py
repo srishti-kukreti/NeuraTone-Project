@@ -66,18 +66,16 @@ def generate_gemini_summary(report: dict, gemini_api_key: str = None,
 
     # 3. High-End Markdown Construction
     summary = (
-        f"#### {icon} **Clinical Synthesis**\n"
+        f"##### {icon} **Clinical Synthesis**\n"
         f"> NeuraTone analysis indicates a **{sev.lower()} level** of depressive symptomatology. "
         f"{patterns.get(sev, patterns['Minimal'])}\n\n"
-        f"#### 📊 **Diagnostic Evidence**\n"
+        f"##### ⚫ **Diagnostic Evidence**\n"
         f"* **PHQ-8 Estimate:** {phq:.1f} / 24\n"
-        f"* **Ensemble Probability:** {prob:.2%}\n"
         f"* **Temporal Trend:** The behavioral trajectory is currently **{trend}**, suggesting "
         f"{ 'persistent' if trend == 'descending' else 'fluctuating' } affect over the session duration.\n\n"
-        f"#### 🩺 **Clinical Recommendation**\n"
+        f"##### ⚫ **Clinical Recommendation**\n"
         f"{recommendations.get(sev, recommendations['Minimal'])}\n\n"
         f"--- \n"
-        f"*Technical Note: This report is derived from 88-dimensional eGeMAPS feature extraction and Temporal Attention Network (TAN) inference.*"
     )
     
     return summary
