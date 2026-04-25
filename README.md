@@ -1,4 +1,4 @@
-# NeuraTone v7 — "Kore" Luxe-Clinical Edition
+# NeuraTone v7 
 
 A high-end, voice-first clinical depression screening platform powered by
 the Kore voice profile, Gemini Live API, and the TAN + LightGBM Inference
