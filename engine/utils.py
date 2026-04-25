@@ -13,6 +13,7 @@ import io
 import os
 import tempfile
 import numpy as np
+import streamlit.components.v1 as components
 
 
 # ── Severity colour palette ───────────────────────────────────────────
@@ -721,3 +722,20 @@ def purge_session_data(
         "reports_reset": reports_reset,
         "errors"       : errors,
     }
+
+#dr_maya voice
+def dr_maya_voice_trigger(text):
+    """Triggers the browser's native voice engine via JavaScript."""
+    if text:
+        # Clean the text for JavaScript safety
+        clean_text = text.replace("'", "\\'").replace("\n", " ")
+        js_code = f"""
+            <script>
+            var msg = new SpeechSynthesisUtterance('{clean_text}');
+            msg.rate = 0.95; // A calm, professional clinical pace
+            msg.pitch = 1.0;
+            window.speechSynthesis.speak(msg);
+            </script>
+        """
+        # Executes the script invisibly
+        components.html(js_code, height=0, width=0)
